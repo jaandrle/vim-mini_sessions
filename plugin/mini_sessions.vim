@@ -14,30 +14,24 @@ if(filewritable(g:sessions_dir) != 2)
     exe 'silent !mkdir -p ' g:sessions_dir
     redraw!
 endif
-set sessionoptions-=options
-let g:this_session_name= "—"
 let s:this_session_saving= 0
 
-function! mini_sessions#save(name)
-    let b:path= g:sessions_dir.a:name.".vim"
-    exe "mksession! ".b:path
-    let lines= readfile(b:path)
-    let session_line= len(lines)-4
-    call writefile(lines[0:session_line]+[ "let g:this_session_name='".a:name."'" ]+lines[session_line+1:], b:path)
+function! mini_sessions#save(path_session)
+    exe "mksession! ".a:path_session
 endfunction
 function! mini_sessions#create(name)
-    let b:swd= input("Session working directory:\n", system('echo $(pwd)'), "file")
+    let b:swd= input("Session working directory:\n", execute('pwd'), "file")
     exe "cd ".b:swd
     exe "lcd ".b:swd
-    call mini_sessions#save(a:name)
+    call mini_sessions#save(g:sessions_dir.a:name.".vim")
     echo "\nSession '".a:name."' successfully created."
 endfunction
 function! mini_sessions#autosave()
-    if g:this_session_name == "—" || s:this_session_saving
+    if v:this_session=='' || s:this_session_saving
         return 0
     endif
     let s:this_session_saving=1
-    call mini_sessions#save(g:this_session_name)
+    call mini_sessions#save(v:this_session)
     let s:this_session_saving=0
 endfunction
 function! mini_sessions#open()

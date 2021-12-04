@@ -29,8 +29,9 @@ function! mini_sessions#create(name)
     call mini_sessions#save(g:sessions_dir.b:name.".vim")
     echo "\nSession '".b:name."' successfully created."
 endfunction
-function! mini_sessions#open() abort
-    call feedkeys(':so '.g:sessions_dir."	", 'tn')
+function! mini_sessions#open(...) abort
+    let prefill= !a:0 ? '' : a:1
+    call feedkeys(':so '.g:sessions_dir.prefill."	", 'tn')
 endfunction
 function! mini_sessions#sessionConfig() abort
     if v:this_session==''

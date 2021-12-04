@@ -17,30 +17,38 @@ endif
 let s:this_session_saving= 0
 
 function! mini_sessions#save(path_session)
+    let s:this_session_saving=1
     exe "mksession! ".a:path_session
+    let s:this_session_saving=0
 endfunction
 function! mini_sessions#create(name)
     let b:swd= input("Session working directory:\n", execute('pwd'), "file")
     exe "cd ".b:swd
     exe "lcd ".b:swd
-    call mini_sessions#save(g:sessions_dir.a:name.".vim")
-    echo "\nSession '".a:name."' successfully created."
+    let b:name= fnameescape(a:name)
+    call mini_sessions#save(g:sessions_dir.b:name.".vim")
+    echo "\nSession '".b:name."' successfully created."
 endfunction
-function! mini_sessions#autosave()
+function! mini_sessions#open() abort
+    call feedkeys(':so '.g:sessions_dir."	", 'tn')
+endfunction
+function! mini_sessions#sessionConfig() abort
+    if v:this_session==''
+        echo 'You must open session first!'
+        return 0
+    endif
+    exe 'e '.join(split(v:this_session, '\.')[0:-2], '.').'x.vim'
+endfunction
+
+function! s:Autosave() abort
     if v:this_session=='' || s:this_session_saving
         return 0
     endif
-    let s:this_session_saving=1
     call mini_sessions#save(v:this_session)
-    let s:this_session_saving=0
 endfunction
-function! mini_sessions#open()
-    call feedkeys(':so '.g:sessions_dir."	", 'tn')
-endfunction
-
 augroup mini_sessions
     autocmd!
-    autocmd VimLeave,BufWritePost * :call mini_sessions#autosave()
+    autocmd VimLeave,BufWritePost * :call <sid>Autosave()
 augroup END
 
 " #region Finish

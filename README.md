@@ -32,6 +32,8 @@ command! -nargs=0 Scd :call mini_sessions#recoverPwd()
 - see `:help wildmode` (I use `set wildmode=list:longest,list:full`)
 - use nicknames as sessions names, also you can group your sessions
 in form of (better for autocompetition): `group_session_app.vim`, `group_session_web.vim`, …
+    - `mini_sessions#open` accepts optional argument for prefill your _group_ (e. g.
+    `mini_sessions#open('work_')` → `:so ~/.vim/sessions/work_<tab>`)
 - you can define session specific stuffs inside file endings with __x__,
     - so your `~/.vim/sessions` can looks:
         ```

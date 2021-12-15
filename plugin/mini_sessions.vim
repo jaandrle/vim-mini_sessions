@@ -33,8 +33,9 @@ function! mini_sessions#load(name) abort
     execute 'so '.g:mini_session#directory.a:name.'.vim'
 endfunction
 function! mini_sessions#complete(word_start, ...) abort
+    let idx= g:mini_session#directory->len()
     let candidates= glob(g:mini_session#directory.'*.vim')->split('\n')
-        \ ->map({ _, v -> substitute(v[:-5], g:mini_session#directory, '', '') })
+        \ ->map({ _, v -> v[idx:-5] })
     return candidates->filter({ _, v -> v=~a:word_start && ( v[-1:]!='x' || candidates->index(v[:-2])==-1 ) })
 endfunction
 

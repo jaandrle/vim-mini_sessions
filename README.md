@@ -3,7 +3,7 @@
 Minimalistics sessions for Vim using build-in behaviour (see `:help mksession`).
 There are only three changes:
 
-1) project/sessions root directory is also saved as `(l)cd`
+1) project/sessions root directory is also saved as `cd`
 1) sessions files are stored only in `~/.vim/sessions`, opening function
 just prefill `:so ~/.vim/sessions/` and triggers completion (`:help wildmenu`)
 1) plugin manages saving when you saving buffer and or leaving Vim.
